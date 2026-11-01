@@ -1,0 +1,367 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MovieMind | AI Sentiment Analysis</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation Bar -->
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            Movie<span>Mind.</span>
+        </a>
+
+        <nav>
+            <a href="/" class="active">Home</a>
+            <a href="/dashboard">Dashboard</a>
+        </nav>
+
+        <div class="nav-badge">
+            AI POWERED
+        </div>
+
+    </header>
+
+
+    <!-- Main Content -->
+    <main>
+
+        <!-- Hero Section -->
+        <section class="hero">
+
+            <div class="hero-tag">
+                <span class="status-dot"></span>
+                MACHINE LEARNING & NLP PROJECT
+            </div>
+
+            <h1>
+                Understand the <span>feeling</span>
+                <br>
+                behind every review.
+            </h1>
+
+            <p>
+                Discover the emotions hidden in movie reviews.
+                Our Machine Learning model analyzes your text
+                and identifies whether the sentiment is positive
+                or negative.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="#analyzer" class="primary-link">
+                    Analyze a Review →
+                </a>
+
+                <a href="/dashboard" class="secondary-link">
+                    View Analytics
+                </a>
+            </div>
+
+        </section>
+
+
+        <!-- Sentiment Analyzer -->
+        <section class="analyzer" id="analyzer">
+
+            <div class="analyzer-header">
+
+                <div>
+                    <span class="section-label">
+                        SENTIMENT CLASSIFIER
+                    </span>
+
+                    <h2>Analyze Movie Review</h2>
+
+                    <p>
+                        Enter your movie experience below.
+                    </p>
+                </div>
+
+                <div class="model-badge">
+                    <span class="status-dot"></span>
+                    Linear SVM Model
+                </div>
+
+            </div>
+
+
+            <!-- Review Form -->
+            <form method="POST" action="/">
+
+                <label for="review">
+                    Your Movie Review
+                </label>
+
+                <textarea
+                    id="review"
+                    name="review"
+                    maxlength="10000"
+                    placeholder="Example: This movie was absolutely amazing. The acting was excellent and the storyline was wonderful..."
+                    required>{{ review }}</textarea>
+
+
+                <div class="input-footer">
+
+                    <span id="charCount">
+                        0 / 10,000 characters
+                    </span>
+
+                    <button type="submit"
+                            class="analyze-button">
+
+                        Analyze Sentiment
+
+                        <span>→</span>
+
+                    </button>
+
+                </div>
+
+            </form>
+
+
+            <!-- Error Message -->
+            {% if error %}
+
+            <div class="error-box">
+                <span>⚠</span>
+                {{ error }}
+            </div>
+
+            {% endif %}
+
+
+            <!-- Prediction Result -->
+            {% if sentiment %}
+
+            <div class="result-card {{ sentiment.lower() }}">
+
+                {% if sentiment == "Positive" %}
+
+                    <div class="result-icon">
+                        😊
+                    </div>
+
+                    <span class="result-status">
+                        POSITIVE SENTIMENT
+                    </span>
+
+                    <h2>
+                        This review is Positive!
+                    </h2>
+
+                    <p>
+                        The model identified a positive opinion
+                        in your movie review.
+                    </p>
+
+                {% else %}
+
+                    <div class="result-icon">
+                        😞
+                    </div>
+
+                    <span class="result-status">
+                        NEGATIVE SENTIMENT
+                    </span>
+
+                    <h2>
+                        This review is Negative!
+                    </h2>
+
+                    <p>
+                        The model identified a negative opinion
+                        in your movie review.
+                    </p>
+
+                {% endif %}
+
+                <div class="prediction-footer">
+                    Prediction generated using Linear SVM
+                </div>
+
+            </div>
+
+            {% endif %}
+
+        </section>
+
+
+        <!-- Features Section -->
+        <section class="features-section">
+
+            <div class="section-title">
+
+                <span class="section-label">
+                    HOW IT WORKS
+                </span>
+
+                <h2>
+                    Intelligent Analysis Pipeline
+                </h2>
+
+                <p>
+                    Three essential stages power our
+                    sentiment prediction system.
+                </p>
+
+            </div>
+
+
+            <div class="features-grid">
+
+                <div class="feature-card">
+
+                    <div class="feature-number">
+                        01
+                    </div>
+
+                    <div class="feature-icon">
+                        📝
+                    </div>
+
+                    <h3>Text Preprocessing</h3>
+
+                    <p>
+                        Cleans movie reviews using tokenization,
+                        stopword removal and lemmatization.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-number">
+                        02
+                    </div>
+
+                    <div class="feature-icon">
+                        🔍
+                    </div>
+
+                    <h3>TF-IDF Extraction</h3>
+
+                    <p>
+                        Converts cleaned text into meaningful
+                        numerical features.
+                    </p>
+
+                </div>
+
+
+                <div class="feature-card">
+
+                    <div class="feature-number">
+                        03
+                    </div>
+
+                    <div class="feature-icon">
+                        🤖
+                    </div>
+
+                    <h3>ML Prediction</h3>
+
+                    <p>
+                        Uses a trained Support Vector Machine
+                        to classify review sentiment.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Project Information -->
+        <section class="project-info">
+
+            <div>
+                <span class="section-label">
+                    ABOUT THE PROJECT
+                </span>
+
+                <h2>
+                    Machine Learning Meets
+                    <span>Natural Language Processing</span>
+                </h2>
+
+                <p>
+                    MovieMind is an academic Machine Learning
+                    project that uses Natural Language Processing,
+                    TF-IDF feature extraction and classification
+                    algorithms to analyze movie reviews.
+                </p>
+            </div>
+
+            <a href="/dashboard" class="dashboard-link">
+                Explore Model Performance →
+            </a>
+
+        </section>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <div class="footer-logo">
+            MovieMind.
+        </div>
+
+        <p>
+            Sentiment Analysis on Movie Reviews
+            Using Machine Learning and NLP
+        </p>
+
+        <p class="copyright">
+            Academic Minor Project | 2026
+        </p>
+
+    </footer>
+
+
+    <!-- Character Counter -->
+    <script>
+
+        const reviewInput =
+            document.getElementById("review");
+
+        const charCount =
+            document.getElementById("charCount");
+
+        function updateCounter() {
+
+            const count = reviewInput.value.length;
+
+            charCount.textContent =
+                count + " / 10,000 characters";
+
+        }
+
+        reviewInput.addEventListener(
+            "input",
+            updateCounter
+        );
+
+        updateCounter();
+
+    </script>
+
+</body>
+
+</html>

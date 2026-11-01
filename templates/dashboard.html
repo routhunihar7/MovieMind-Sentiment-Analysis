@@ -1,0 +1,622 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>MovieMind | Analytics Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <header class="navbar">
+
+        <a href="/" class="logo">
+            Movie<span>Mind.</span>
+        </a>
+
+        <nav>
+            <a href="/">Home</a>
+            <a href="/dashboard" class="active">Dashboard</a>
+        </nav>
+
+        <div class="nav-badge">
+            ANALYTICS
+        </div>
+
+    </header>
+
+
+    <main class="dashboard-main">
+
+        <!-- Dashboard Heading -->
+        <section class="dashboard-hero">
+
+            <span class="section-label">
+                MACHINE LEARNING ANALYTICS
+            </span>
+
+            <h1>Performance Dashboard</h1>
+
+            <p>
+                Analyze and compare the performance of
+                different Machine Learning algorithms
+                used in MovieMind.
+            </p>
+
+        </section>
+
+
+        <!-- Summary Cards -->
+        <section class="stats-grid">
+
+            <div class="stat-card">
+
+                <span class="stat-icon">📊</span>
+
+                <p>Total Predictions</p>
+
+                <h2>{{ total_predictions }}</h2>
+
+                <span class="stat-description">
+                    Reviews analyzed
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">😊</span>
+
+                <p>Positive Reviews</p>
+
+                <h2 class="positive-text">
+                    {{ positive_count }}
+                </h2>
+
+                <span class="stat-description">
+                    Positive predictions
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">😞</span>
+
+                <p>Negative Reviews</p>
+
+                <h2 class="negative-text">
+                    {{ negative_count }}
+                </h2>
+
+                <span class="stat-description">
+                    Negative predictions
+                </span>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <span class="stat-icon">🏆</span>
+
+                <p>Best Model Accuracy</p>
+
+                <h2>{{ best_accuracy }}%</h2>
+
+                <span class="stat-description">
+                    {{ best_model }}
+                </span>
+
+            </div>
+
+        </section>
+
+
+        <!-- Model Accuracy Chart -->
+        <section class="dashboard-grid">
+
+            <div class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span class="section-label">
+                            MODEL COMPARISON
+                        </span>
+
+                        <h2>Accuracy Comparison</h2>
+                    </div>
+
+                    <span class="chart-tag">
+                        Accuracy %
+                    </span>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="accuracyChart"></canvas>
+                </div>
+
+            </div>
+
+
+            <!-- Performance Metrics -->
+            <div class="dashboard-card">
+
+                <div class="card-heading">
+
+                    <div>
+                        <span class="section-label">
+                            PERFORMANCE ANALYSIS
+                        </span>
+
+                        <h2>Evaluation Metrics</h2>
+                    </div>
+
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="metricsChart"></canvas>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Model Comparison Table -->
+        <section class="dashboard-card full-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <span class="section-label">
+                        DETAILED EVALUATION
+                    </span>
+
+                    <h2>Machine Learning Model Results</h2>
+                </div>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Model</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1 Score</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in metrics %}
+
+                        <tr>
+
+                            <td class="model-name">
+                                {{ item.Model }}
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(item.Accuracy * 100) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(item.Precision * 100) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(item.Recall * 100) }}%
+                            </td>
+
+                            <td>
+                                {{ "%.2f"|format(item["F1 Score"] * 100) }}%
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Confusion Matrices -->
+        <section class="dashboard-card full-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <span class="section-label">
+                        CLASSIFICATION ANALYSIS
+                    </span>
+
+                    <h2>Confusion Matrix Visualization</h2>
+
+                    <p>
+                        Comparison of actual and predicted
+                        sentiment classifications.
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <div class="matrix-grid">
+
+                <div class="matrix-card">
+
+                    <h3>Naive Bayes</h3>
+
+                    <img
+                        src="{{ url_for('static', filename='images/naive_bayes_confusion_matrix.png') }}"
+                        alt="Naive Bayes Confusion Matrix">
+
+                </div>
+
+
+                <div class="matrix-card">
+
+                    <h3>Support Vector Machine</h3>
+
+                    <img
+                        src="{{ url_for('static', filename='images/svm_confusion_matrix.png') }}"
+                        alt="SVM Confusion Matrix">
+
+                </div>
+
+
+                <div class="matrix-card">
+
+                    <h3>Logistic Regression</h3>
+
+                    <img
+                        src="{{ url_for('static', filename='images/logistic_regression_confusion_matrix.png') }}"
+                        alt="Logistic Regression Confusion Matrix">
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- Prediction History -->
+        <section class="dashboard-card full-card">
+
+            <div class="card-heading">
+
+                <div>
+                    <span class="section-label">
+                        RECENT ACTIVITY
+                    </span>
+
+                    <h2>Prediction History</h2>
+
+                    <p>
+                        Recently analyzed movie reviews.
+                    </p>
+
+                </div>
+
+                <a href="/" class="secondary-link">
+                    New Analysis →
+                </a>
+
+            </div>
+
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+                            <th>Movie Review</th>
+                            <th>Predicted Sentiment</th>
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+                        {% for item in history %}
+
+                        <tr>
+
+                            <td class="review-cell">
+                                {{ item.review }}
+                            </td>
+
+                            <td>
+
+                                {% if item.sentiment == "Positive" %}
+
+                                    <span class="sentiment-positive">
+                                        Positive
+                                    </span>
+
+                                {% else %}
+
+                                    <span class="sentiment-negative">
+                                        Negative
+                                    </span>
+
+                                {% endif %}
+
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+
+                            <td colspan="2" class="empty-message">
+                                No predictions available.
+                                Analyze a movie review to get started.
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+        <!-- Back Button -->
+        <div class="dashboard-footer-link">
+
+            <a href="/">
+                ← Back to Sentiment Analyzer
+            </a>
+
+        </div>
+
+    </main>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <div class="footer-logo">
+            MovieMind.
+        </div>
+
+        <p>
+            Sentiment Analysis on Movie Reviews
+            Using Machine Learning and NLP
+        </p>
+
+        <p class="copyright">
+            Academic Minor Project | 2026
+        </p>
+
+    </footer>
+
+
+    <!-- Chart.js Configuration -->
+    <script>
+
+        const modelLabels = [
+            {% for item in metrics %}
+                {{ item.Model | tojson }},
+            {% endfor %}
+        ];
+
+        const accuracyData = [
+            {% for item in metrics %}
+                {{ (item.Accuracy * 100) | round(2) }},
+            {% endfor %}
+        ];
+
+        const precisionData = [
+            {% for item in metrics %}
+                {{ (item.Precision * 100) | round(2) }},
+            {% endfor %}
+        ];
+
+        const recallData = [
+            {% for item in metrics %}
+                {{ (item.Recall * 100) | round(2) }},
+            {% endfor %}
+        ];
+
+        const f1Data = [
+            {% for item in metrics %}
+                {{ (item["F1 Score"] * 100) | round(2) }},
+            {% endfor %}
+        ];
+
+
+        // Accuracy comparison chart
+
+        new Chart(
+            document.getElementById("accuracyChart"),
+            {
+                type: "bar",
+
+                data: {
+
+                    labels: modelLabels,
+
+                    datasets: [{
+
+                        label: "Accuracy (%)",
+
+                        data: accuracyData,
+
+                        backgroundColor: [
+                            "#8b5cf6",
+                            "#22c55e",
+                            "#3b82f6"
+                        ],
+
+                        borderRadius: 8
+
+                    }]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+
+                    scales: {
+
+                        y: {
+
+                            beginAtZero: true,
+                            max: 100,
+
+                            ticks: {
+                                color: "#a5acc2"
+                            },
+
+                            grid: {
+                                color: "#303951"
+                            }
+
+                        },
+
+                        x: {
+
+                            ticks: {
+                                color: "#d1d5e3"
+                            },
+
+                            grid: {
+                                display: false
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+
+        // Evaluation metrics chart
+
+        new Chart(
+            document.getElementById("metricsChart"),
+            {
+                type: "bar",
+
+                data: {
+
+                    labels: modelLabels,
+
+                    datasets: [
+
+                        {
+                            label: "Precision",
+                            data: precisionData,
+                            backgroundColor: "#60a5fa"
+                        },
+
+                        {
+                            label: "Recall",
+                            data: recallData,
+                            backgroundColor: "#34d399"
+                        },
+
+                        {
+                            label: "F1 Score",
+                            data: f1Data,
+                            backgroundColor: "#fbbf24"
+                        }
+
+                    ]
+
+                },
+
+                options: {
+
+                    responsive: true,
+
+                    maintainAspectRatio: false,
+
+                    scales: {
+
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: "#a5acc2"
+                            },
+                            grid: {
+                                color: "#303951"
+                            }
+                        },
+
+                        x: {
+                            ticks: {
+                                color: "#d1d5e3"
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+
+                    }
+
+                }
+
+            }
+        );
+
+    </script>
+
+</body>
+
+</html>
